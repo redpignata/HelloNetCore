@@ -1,0 +1,21 @@
+version: '3.4'
+
+services:
+  hellonetcore:
+    image: hellonetcore:dev
+    build:
+      args:
+        source: obj/Docker/empty/
+    environment:
+      - DOTNET_USE_POLLING_FILE_WATCHER=1
+      - NUGET_FALLBACK_PACKAGES=
+    volumes:
+      - C:\Users\Luis Alberto Castro\documents\visual studio 2017\Projects\HelloNetCore\HelloNetCore:/app
+      - C:\Users\Luis Alberto Castro\vsdbg\vs2017u5:/remote_debugger:ro
+      - C:\Users\Luis Alberto Castro\.nuget\packages\:/root/.nuget/packages:ro
+    entrypoint: tail -f /dev/null
+    labels:
+      com.microsoft.visualstudio.debuggee.program: "dotnet"
+      com.microsoft.visualstudio.debuggee.arguments: " --additionalProbingPath /root/.nuget/packages  bin/Debug/netcoreapp1.1/HelloNetCore.dll"
+      com.microsoft.visualstudio.debuggee.workingdirectory: "/app"
+      com.microsoft.visualstudio.debuggee.killprogram: "/bin/bash -c \"if PID=$$(pidof -x dotnet); then kill $$PID; fi\""
